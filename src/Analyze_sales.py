@@ -18,11 +18,6 @@ def Total_sale_prices_perday():
     totalperday = df.groupby(["date", "product"])["TotalPricePerProduct"].sum()
     print(totalperday)
 
-#Didnt actually use this as a feature yet but we can add this much laterr hmm
-def datahead():
-    print("Dataset Head Preview:" )
-    print(df.head())
-
 def revenue():
     #Total revenue
     totalrev = df["TotalPricePerProduct"].sum()
@@ -30,13 +25,27 @@ def revenue():
 
 #This is the dynamic column to like sum the prices and stuff dafuq, dont change this if you you just gonna make it static
 def columnsum(col):
-    print(df[col].sum())
+    if col == "product":
+        print(df[col].value_counts())
+    else:
+        print(df[col].sum())
 
+#Top products
+def top_products(respond):
+
+    if respond == 1:
+        print(f"\nMost Selling by Profit")
+        res = df.groupby("product")["TotalPricePerProduct"].sum().sort_values(ascending=False)
+        print(res.head(5))
+    elif respond == 2:
+        print(f"\nMost selling by Popularity")
+        res = df.groupby("product")["quantity"].sum().sort_values(ascending=False)
+        print(res.head(5))
 
 while True:
-    print(f"1. Get Revenues | 2. View Dataset | 3. Structure the table | 4. Get sum of each column")
+    print(f"\n1. Get Revenues | 2. View Dataset | 3. Structure the table | 4. Get sum of each column | 5. Get the top products")
     try:
-        answer = int(input(f"Choose an Option to do with the file (1,2,3,4): "))
+        answer = int(input(f"Choose an Option to do with the file (1,2,3,4,5): "))
     except ValueError:
         print("Invalid answer")
         continue
@@ -44,22 +53,23 @@ while True:
     if answer == 1:
         print(revenue())
     elif answer == 2:
-        print(df)
-    elif answer == 3:  #This part of it is experimental for now since it so so broad to like structure much tables if the csv or dataset has many columns with relations
+        print(f"Sample of the dataframe")
+        print(df.sample(min(10, len(df)))) #Printing out a sample of 10 but also reassures the length depending on the dataset
+    elif answer == 3: #This part of it is experimental for now since it so so broad to like structure much tables if the csv or dataset has many columns with relations
         Total_sale_prices_perday()
     elif answer == 4: #Get sum of the computing columns but not every column tho so watch out
-        print(f"1. product | 2. price | 3. quantity")
-        answercolumn = int(input(f"Which column to sum?: (1,2,3): "))
+        print(df.columns)
+        answercolumn = input(f"Enter a column to sum: ").lower()
 
-        match answercolumn:
-            case 1:
-                print(f"\nThis is the total count of all products")
-                columnsum("product")
-            case 2:
-                print(f"\nThis is the total sum of all prices")
-                columnsum("price")
-            case 3: 
-                print(f"\nTotal Quantity of all products")
-                columnsum("quantity")
+        if answercolumn in df.columns:
+            columnsum(answercolumn)
+        else:
+            print(f"Invalid Column Name Please Try Again")
+
+    elif answer == 5:
+        print(f"\n1. Profit | 2. Popular")
+        topanswer = int(input("By most profit or by most Popular? "))
+        top_products(topanswer)
+
     else:
         print("invalid option please choose between 1 - 4")
