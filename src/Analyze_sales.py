@@ -42,8 +42,12 @@ def top_products(respond):
         res = df.groupby("product")["quantity"].sum().sort_values(ascending=False)
         print(res.head(5))
 
+def groups(group_by, group_with):
+    groupreturn = df.groupby(group_by)[group_with].value_counts()
+    print(groupreturn)
+
 while True:
-    print(f"\n1. Get Revenues | 2. View Dataset | 3. Structure the table | 4. Get sum of each column | 5. Get the top products")
+    print(f"\n1. Get Revenues | 2. View Dataset | 3. Group the table | 4. Get sum of a column | 5. Get the top products")
     try:
         answer = int(input(f"Choose an Option to do with the file (1,2,3,4,5): "))
     except ValueError:
@@ -55,8 +59,11 @@ while True:
     elif answer == 2:
         print(f"Sample of the dataframe")
         print(df.sample(min(10, len(df)))) #Printing out a sample of 10 but also reassures the length depending on the dataset
-    elif answer == 3: #This part of it is experimental for now since it so so broad to like structure much tables if the csv or dataset has many columns with relations
-        Total_sale_prices_perday()
+    elif answer == 3:#This part of it is experimental for now since it so so broad to like structure much tables if the csv or dataset has many columns with relations
+        print(f"\n{df.head(5)}")
+        group_by = input(f"Enter a column to group by: ").lower()
+        group_with = input(f"Enter a column to group with: ").lower()
+        groups(group_by, group_with)
     elif answer == 4: #Get sum of the computing columns but not every column tho so watch out
         print(df.columns)
         answercolumn = input(f"Enter a column to sum: ").lower()
@@ -68,7 +75,7 @@ while True:
 
     elif answer == 5:
         print(f"\n1. Profit | 2. Popular")
-        topanswer = int(input("By most profit or by most Popular? "))
+        topanswer = int(input("By most profit or by most Popular (1, 2)? "))
         top_products(topanswer)
 
     else:
