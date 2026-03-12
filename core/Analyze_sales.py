@@ -12,15 +12,15 @@ datapath = BASE_DIR / "data" / "sales.csv"
 df = pd.read_csv(datapath)
 
 #added a revenue column
-df["TotalPricePerProduct"] = df["price"] * df["quantity"]
+df["total_price_per_product"] = df["price"] * df["quantity"]
 
 def Total_sale_prices_perday():
-    totalperday = df.groupby(["date", "product"])["TotalPricePerProduct"].sum()
+    totalperday = df.groupby(["date", "product"])["total_price_per_product"].sum()
     print(totalperday)
 
 def revenue():
     #Total revenue
-    totalrev = df["TotalPricePerProduct"].sum()
+    totalrev = df["total_price_per_product"].sum()
     return totalrev
 
 #This is the dynamic column to like sum the prices and stuff dafuq, dont change this if you you just gonna make it static
