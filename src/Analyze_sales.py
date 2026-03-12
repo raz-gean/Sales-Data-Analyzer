@@ -43,7 +43,13 @@ def top_products(respond):
         print(res.head(5))
 
 def groups(group_by, group_with):
-    groupreturn = df.groupby(group_by)[group_with].value_counts()
+
+    #Used agg to actually get useful info of quantity and total price for product not actually quite dynamic
+    groupreturn = df.groupby([group_by, group_with]).agg({
+        "quantity": "sum",
+        "TotalPricePerProduct": "sum"
+    })
+
     print(groupreturn)
 
 while True:
@@ -63,6 +69,11 @@ while True:
         print(f"\n{df.head(5)}")
         group_by = input(f"Enter a column to group by: ").lower()
         group_with = input(f"Enter a column to group with: ").lower()
+
+        if group_by not in df.columns or group_with not in df.columns:
+            print("typed column isnt present, please select proper column")
+            break
+        
         groups(group_by, group_with)
     elif answer == 4: #Get sum of the computing columns but not every column tho so watch out
         print(df.columns)
