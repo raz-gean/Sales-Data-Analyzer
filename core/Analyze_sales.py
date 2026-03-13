@@ -1,3 +1,5 @@
+#This is the main program i seperated it for now for experimental needs
+
 import pandas as pd
 import numpy as np
 from pathlib import Path
@@ -47,7 +49,7 @@ def groups(group_by, group_with):
     #Used agg to actually get useful info of quantity and total price for product not actually quite dynamic
     groupreturn = df.groupby([group_by, group_with]).agg({
         "quantity": "sum",
-        "TotalPricePerProduct": "sum"
+        "total_price_per_product": "sum"
     })
 
     print(groupreturn)

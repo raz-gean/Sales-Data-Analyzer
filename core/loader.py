@@ -9,7 +9,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent #Modify this based on your fol
 
 DATA_PATH = BASE_DIR / "data" / "sales.csv" #Modify this based on your own folder name
 
-def load_data():
+#Type hints pd.dataframe
+def load_data() -> pd.DataFrame:
     df = pd.read_csv(DATA_PATH)
 
     #The Total Price Per Row Computation
