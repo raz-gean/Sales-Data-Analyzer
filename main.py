@@ -1,4 +1,6 @@
 import argparse
+from pathlib import Path
+from datetime import datetime
 
 from core.loader import load_data
 from analytics.engine import analyze
@@ -46,6 +48,11 @@ def parse_args() -> argparse.Namespace:
         "--limit",
         type=int,
         help="Limit the number of rows returned.",
+    )
+
+    parser.add_argument(
+        "--output",
+        help="Output file name (without path/extension). Will be saved as CSV in the output/ folder (e.g. --output revenue_report).",
     )
 
     return parser.parse_args()
@@ -113,7 +120,16 @@ def main() -> None:
         limit=args.limit,
     )
 
-    print(result)
+    if args.output:
+        output_dir = Path(__file__).resolve().parent / "output"
+        output_dir.mkdir(exist_ok=True)
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        output_file = output_dir / f"{args.output}_{timestamp}.csv"
+        result.to_csv(output_file, index=False)
+        print(f"✓ Results saved to: {output_file}")
+        print(f"\n{result}")
+    else:
+        print(result)
 
 
 if __name__ == "__main__":
